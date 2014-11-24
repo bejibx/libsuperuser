@@ -21,6 +21,11 @@ public class ShellHelper
         Shell.SU.run(command);
     }
 
+    public static void write(String toFile, byte b, int offset)
+    {
+        write(toFile, new byte[]{b}, offset);
+    }
+
     public static byte[] read(String fromFile, int offset, int count)
     {
         String format = "busybox od --address-radix=n --output-duplicates --format=x1 --skip-bytes=%1$d --read-bytes=%2$d '%3$s'";
@@ -167,5 +172,11 @@ public class ShellHelper
     public static void reboot()
     {
         Shell.SU.run("reboot");
+    }
+
+    public static int getFileSize(String path)
+    {
+        List<String> output = Shell.SU.run("busybox stat -c %s " + path);
+        return Integer.decode(output.get(0).replace("\n", ""));
     }
 }
